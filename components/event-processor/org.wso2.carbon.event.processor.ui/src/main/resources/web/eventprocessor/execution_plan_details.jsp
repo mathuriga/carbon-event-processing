@@ -300,6 +300,40 @@
                             key="trace.disable.link"/></a>
                 </div>
             </div>
+            <%}
+            if (configurationDto.getProcessingEnabled()) {%>
+                <div style="display: inline-block">
+                    <div id="disableProcessing<%= configurationDto.getName()%>">
+                        <a href="#"
+                           onclick="disableProcessing('<%= configurationDto.getName() %>')"
+                           class="icon-link"
+                           style="background-image:url(images/process-disabled.png);">Disable Processing</a>
+                    </div>
+                    <div id="enableProcessing<%= configurationDto.getName()%>"
+                         style="display:none;">
+                        <a href="#"
+                           onclick="enableProcessing('<%= configurationDto.getName() %>')"
+                           class="icon-link"
+                           style="background-image:url(images/process-enabled.png);">Enable Processing</a>
+                    </div>
+                </div>
+                <% } else { %>
+                <div style="display: inline-block">
+                    <div id="enableProcessing<%= configurationDto.getName() %>">
+                        <a href="#"
+                           onclick="enableProcessing('<%= configurationDto.getName() %>')"
+                           class="icon-link"
+                           style="background-image:url(images/process-enabled.png);">Enable Processing</a>
+                    </div>
+                    <div id="disableProcessing<%= configurationDto.getName() %>"
+                         style="display:none">
+                        <a href="#"
+                           onclick="disableProcessing('<%= configurationDto.getName() %>')"
+                           class="icon-link"
+                           style="background-image:url(images/process-disabled.png);">Disable Processing</a>
+                    </div>
+                </div>
+
 
             <% } %>
 

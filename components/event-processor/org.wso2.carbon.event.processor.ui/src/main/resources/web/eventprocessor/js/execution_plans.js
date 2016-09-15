@@ -279,6 +279,7 @@ var ENABLE = "enable";
 var DISABLE = "disable";
 var STAT = "statistics";
 var TRACE = "Tracing";
+var PROCESS = "Processing";
 
 function doDelete(executionPlanName) {
     CARBON.showConfirmationDialog(
@@ -329,24 +330,35 @@ function handleCallback(execPlanName, action, type) {
             element.style.display = "";
             element = document.getElementById("enableStat" + execPlanName);
             element.style.display = "none";
-        } else {
+        } else if (type == "Tracing") {
             element = document.getElementById("disableTracing" + execPlanName);
             element.style.display = "";
             element = document.getElementById("enableTracing" + execPlanName);
             element.style.display = "none";
-        }
+        } else if(type=="Processing"){
+              element=document.getElementById("disableProcessing"+ execPlanName);
+              element.style.display="";
+              element=document.getElementById("enableProcessing"+execPlanName);
+              element.style.display="none";
+          }
     } else {
         if (type == "statistics") {
             element = document.getElementById("disableStat" + execPlanName);
             element.style.display = "none";
             element = document.getElementById("enableStat" + execPlanName);
             element.style.display = "";
-        } else {
+        } else if (type == "Tracing"){
             element = document.getElementById("disableTracing" + execPlanName);
             element.style.display = "none";
             element = document.getElementById("enableTracing" + execPlanName);
             element.style.display = "";
         }
+        else if(type=="Processing"){
+          element=document.getElementById("disableProcessing"+ execPlanName);
+          element.style.display="none";
+          element=document.getElementById("enableProcessing"+execPlanName);
+          element.style.display="";
+      }
     }
 }
 
@@ -380,5 +392,29 @@ function disableTracing(execPlanName) {
                                                ' ' + execPlanName);
                     }
                 });
+}
+
+function enableProcessing(execPlanName) {
+    jQuery.ajax({
+                    type:'POST',
+                    url: '../eventprocessor/stats_tracing_ajaxprocessor.jsp',
+                    data:'execPlanName=' + execPlanName + '&action=enableProcessing',
+                    async:false,
+                    success:function (msg) {
+                        handleCallback(execPlanName, ENABLE, PROCESS);
+                    }
+    });
+}
+
+function disableProcessing(execPlanName) {
+    jQuery.ajax({
+                    type:'POST',
+                    url: '../eventprocessor/stats_tracing_ajaxprocessor.jsp',
+                    data:'execPlanName=' + execPlanName + '&action=disableProcessing',
+                    async:false,
+                    success:function (msg) {
+                        handleCallback(execPlanName, DISABLE, PROCESS);
+                    }
+    });
 }
 

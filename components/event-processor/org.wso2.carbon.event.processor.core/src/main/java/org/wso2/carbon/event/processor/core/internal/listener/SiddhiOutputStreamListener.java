@@ -38,6 +38,7 @@ public class SiddhiOutputStreamListener extends StreamCallback implements EventP
     protected final int tenantId;
     protected final boolean traceEnabled;
     protected final boolean statisticsEnabled;
+    protected final boolean processEnabled;
     private final String streamId;
     private StreamDefinition streamDefinition;
     private int metaAttributeCount;
@@ -60,6 +61,7 @@ public class SiddhiOutputStreamListener extends StreamCallback implements EventP
 
         this.siddhiStreamName = siddhiStreamName;
         this.traceEnabled = executionPlanConfiguration.isTracingEnabled();
+        this.processEnabled = executionPlanConfiguration.isProcessingEnabled();
         this.statisticsEnabled = executionPlanConfiguration.isStatisticsEnabled() &&
                 EventProcessorValueHolder.isGlobalStatisticsEnabled();
         String metricId = EventProcessorConstants.METRIC_PREFIX + EventProcessorConstants.METRIC_DELIMITER +
@@ -90,6 +92,11 @@ public class SiddhiOutputStreamListener extends StreamCallback implements EventP
             PrivilegedCarbonContext.startTenantFlow();
             PrivilegedCarbonContext privilegedCarbonContext = PrivilegedCarbonContext.getThreadLocalCarbonContext();
             privilegedCarbonContext.setTenantId(this.tenantId);
+
+            if (!processEnabled) {
+                return;
+            }
+
             if (traceEnabled) {
                 trace.info(tracerPrefix + Arrays.deepToString(events));
             }
@@ -116,6 +123,10 @@ public class SiddhiOutputStreamListener extends StreamCallback implements EventP
             PrivilegedCarbonContext.startTenantFlow();
             PrivilegedCarbonContext privilegedCarbonContext = PrivilegedCarbonContext.getThreadLocalCarbonContext();
             privilegedCarbonContext.setTenantId(this.tenantId);
+
+            if (!processEnabled) {
+                return;
+            }
             if (traceEnabled) {
                 trace.info(tracerPrefix + event);
             }

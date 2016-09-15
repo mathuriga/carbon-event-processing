@@ -324,6 +324,20 @@ public class EventProcessorAdminService extends AbstractAdmin {
         }
     }
 
+    public void setProcessingEnabled(String executionPlanName, boolean isEnabled) throws AxisFault {
+        EventProcessorService eventProcessorService = EventProcessorAdminValueHolder.getEventProcessorService();
+        if (eventProcessorService != null) {
+            try {
+                eventProcessorService.setProcessingEnabled(executionPlanName, isEnabled);
+            } catch (ExecutionPlanConfigurationException e) {
+                log.error(e.getMessage(), e);
+                throw new AxisFault(e.getMessage(), e);
+            }
+        } else {
+            throw new AxisFault("Event Processor is not loaded");
+        }
+    }
+
     public String validateExecutionPlan(String executionPlan) throws AxisFault {
         try {
             EventProcessorAdminValueHolder.getEventProcessorService().validateExecutionPlan(executionPlan);
@@ -393,6 +407,7 @@ public class EventProcessorAdminService extends AbstractAdmin {
         dto.setExecutionPlan(config.getExecutionPlan());
         dto.setStatisticsEnabled(config.isStatisticsEnabled());
         dto.setTracingEnabled(config.isTracingEnabled());
+        dto.setProcessingEnabled(config.isProcessingEnabled());
         dto.setEditable(config.isEditable());
         dto.setDeploymentStatus(distributedDeploymentStatus);
 

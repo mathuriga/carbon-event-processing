@@ -41,6 +41,7 @@ public abstract class AbstractSiddhiInputEventDispatcher implements SiddhiEventC
     protected final int tenantId;
     private final boolean traceEnabled;
     private final boolean statisticsEnabled;
+    private final boolean processEnabled;
     private Counter eventCounter;
     private String tracerPrefix = "";
 
@@ -51,6 +52,7 @@ public abstract class AbstractSiddhiInputEventDispatcher implements SiddhiEventC
         this.owner = executionPlanConfiguration;
         this.tenantId = tenantId;
         this.traceEnabled = executionPlanConfiguration.isTracingEnabled();
+        this.processEnabled = executionPlanConfiguration.isProcessingEnabled();
         this.statisticsEnabled = executionPlanConfiguration.isStatisticsEnabled() &&
                 EventProcessorValueHolder.isGlobalStatisticsEnabled();
         String metricId = EventProcessorConstants.METRIC_PREFIX + EventProcessorConstants.METRIC_DELIMITER +
@@ -76,6 +78,7 @@ public abstract class AbstractSiddhiInputEventDispatcher implements SiddhiEventC
 
     @Override
     public void consumeEvents(Event[] events) {
+
         if (traceEnabled) {
             trace.info(tracerPrefix + Arrays.deepToString(events));
         }
@@ -84,7 +87,9 @@ public abstract class AbstractSiddhiInputEventDispatcher implements SiddhiEventC
                 if (statisticsEnabled) {
                     eventCounter.inc();
                 }
-                sendEvent(event);
+                if (processEnabled) {
+                    sendEvent(event);
+                }
             } catch (InterruptedException e) {
                 log.error("Error in dispatching events " + Arrays.deepToString(events) + " to Siddhi stream :" +
                         siddhiStreamId);
@@ -95,13 +100,17 @@ public abstract class AbstractSiddhiInputEventDispatcher implements SiddhiEventC
     @Override
     public void consumeEvent(Event event) {
         try {
+//
             if (traceEnabled) {
                 trace.info(tracerPrefix + event);
             }
             if (statisticsEnabled) {
                 eventCounter.inc();
             }
-            sendEvent(event);
+
+            if (processEnabled) {
+                sendEvent(event);
+            }
         } catch (InterruptedException e) {
             log.error("Error in dispatching event " + event + " to Siddhi stream :" + siddhiStreamId);
         }

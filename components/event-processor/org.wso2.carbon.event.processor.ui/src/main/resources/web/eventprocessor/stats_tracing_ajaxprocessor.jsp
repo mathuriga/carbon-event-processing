@@ -37,7 +37,12 @@
             stub.setTracingEnabled(executionPlanName, true);
         } else if ("disableTracing".equals(action)) {
             stub.setTracingEnabled(executionPlanName, false);
+        }else if ("enableProcessing".equals(action)){
+            stub.setProcessingEnabled(executionPlanName, true);
+        }else if ("disableProcessing".equals(action)){
+            stub.setProcessingEnabled(executionPlanName, false);
         }
+
     }
 
 %>

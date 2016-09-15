@@ -34,6 +34,7 @@ public class EventProcessorConstants {
     public static final String EP_ELE_PROPERTY = "property";
     public static final String EP_ATTR_STATISTICS = "statistics";
     public static final String EP_ATTR_TRACING = "trace";
+    public static final String EP_ATTR_PROCESSING = "processing";
     public static final String EP_ENABLE = "enable";
     public static final String EP_DISABLE = "disable";
     public static final String EP_ATTR_PASSTHROUGH_FLOW = "passthroughFlow";
@@ -102,7 +103,7 @@ public class EventProcessorConstants {
     public static final String EXEC_GROUP = "execGroup";
     public static final String ENFORCE_PARALLELISM = "enforceParallel";
     public static final String TRIGGER_AT_EVERY = " at every ";
-    public static final String TRIGGER_AT= " at ";
+    public static final String TRIGGER_AT = " at ";
     public static final String SECOND = " sec";
 
     // Annotations, Annotation Names and relevant tokens.
@@ -114,6 +115,7 @@ public class EventProcessorConstants {
     public static final String ANNOTATION_NAME_DESCRIPTION = "description";
     public static final String ANNOTATION_NAME_TRACE = "trace";
     public static final String ANNOTATION_NAME_STATISTICS = "statistics";
+    public static final String ANNOTATION_NAME_PROCESSING = "processing";
     public static final String ANNOTATION_INCLUDE_ARBITRARY = "arbitrary.data";
 
     public static final String ANNOTATION_TOKEN_AT = "@";
@@ -128,7 +130,7 @@ public class EventProcessorConstants {
     // "Execution plan header" is the part above the Import/Export statements.
 
     // Following regex represents a line in an execution plan header.
-    public static final String PLAN_HEADER_LINE_REGEX = "(^\\s*"+ ANNOTATION_TOKEN_AT + ANNOTATION_PLAN +
+    public static final String PLAN_HEADER_LINE_REGEX = "(^\\s*" + ANNOTATION_TOKEN_AT + ANNOTATION_PLAN +
             ANNOTATION_TOKEN_COLON + ".*)|(^\\s*--.*)|(^\\s*\\/\\*.*\\*\\/\\s*)|(^\\s*)";
 
     public static final String END_OF_PLAN_HEADER_COMMENT_REGEX = "^\\s*\\/\\* define streams and write query here ... \\*\\/\\s*";

@@ -215,6 +215,40 @@
                             </div>
                         </div>
 
+                        <% }
+                        if (executionPlanConfigurationDto.getProcessingEnabled()) { %>
+                        <div class="inlineDiv">
+                            <div id="disableProcessing<%= executionPlanConfigurationDto.getName() %>">
+                                <a href="#"
+                                    onclick="disableProcessing('<%=executionPlanConfigurationDto.getName()%>')"
+                                    class="icon-link"
+                                    style="background-image:url(images/process-disabled.png);">Disable Processing</a>
+                            </div>
+                            <div id="enableProcessing<%= executionPlanConfigurationDto.getName()%>"
+                                style="display:none;">
+                                <a href="#"
+                                    onclick="enableProcessing('<%= executionPlanConfigurationDto.getName()%>')"
+                                    class="icon-link"
+                                    style="background-image:url(images/process-enabled.png);">Enable Processing</a>
+                             </div>
+                         </div>
+                         <% } else {%>
+                         <div class="inlineDiv">
+                             <div id="enableProcessing<%= executionPlanConfigurationDto.getName() %>">
+                                 <a href="#"
+                                     onclick="enableProcessing('<%=executionPlanConfigurationDto.getName()%>')"
+                                     class="icon-link"
+                                     style="background-image:url(images/process-enabled.png);">Enable Processing</a>
+                             </div>
+                             <div id="disableProcessing<%= executionPlanConfigurationDto.getName()%>"
+                                 style="display:none;">
+                                 <a href="#"
+                                     onclick="disableProcessing('<%= executionPlanConfigurationDto.getName()%>')"
+                                     class="icon-link"
+                                     style="background-image:url(images/process-disabled.png);">Disable Processing</a>
+                              </div>
+                          </div>
+
                         <% } %>
 
 

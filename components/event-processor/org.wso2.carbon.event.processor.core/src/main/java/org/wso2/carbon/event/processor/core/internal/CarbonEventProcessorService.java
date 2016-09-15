@@ -59,6 +59,7 @@ import org.wso2.siddhi.query.api.annotation.Element;
 import org.wso2.siddhi.query.api.definition.AbstractDefinition;
 import org.wso2.siddhi.query.api.util.AnnotationHelper;
 import org.wso2.siddhi.query.compiler.SiddhiCompiler;
+import org.wso2.siddhi.query.compiler.SiddhiQLParser;
 import org.wso2.siddhi.query.compiler.exception.SiddhiParserException;
 
 import java.io.File;
@@ -221,6 +222,14 @@ public class CarbonEventProcessorService implements EventProcessorService {
             executionPlanConfiguration.setTracingEnabled(false);
         }
 
+        Element isProcessingEnabledElement = AnnotationHelper.getAnnotationElement(EventProcessorConstants.ANNOTATION_NAME_PROCESSING, null, parsedExecutionPlan.getAnnotations());
+        if (isProcessingEnabledElement != null) {
+            String isProcessingEnabled = isProcessingEnabledElement.getValue();
+            executionPlanConfiguration.setProcessingEnabled(Boolean.valueOf(isProcessingEnabled));
+        } else {
+            executionPlanConfiguration.setProcessingEnabled(true);
+        }
+
         Element isStatsEnabledElement = AnnotationHelper.getAnnotationElement(EventProcessorConstants.ANNOTATION_NAME_STATISTICS, null, parsedExecutionPlan.getAnnotations());
         if (isStatsEnabledElement != null) {
             String isStatsEnabled = isStatsEnabledElement.getValue();
@@ -308,8 +317,8 @@ public class CarbonEventProcessorService implements EventProcessorService {
                 @Override
                 public void handleEventException(Throwable throwable, long l, Object o) {
                     log.error(throwable.getMessage(), throwable);
-                    if(log.isDebugEnabled()){
-                        log.debug("Event dropped by distruptor due to exception : "+ o);
+                    if (log.isDebugEnabled()) {
+                        log.debug("Event dropped by distruptor due to exception : " + o);
                     }
                 }
 
@@ -450,7 +459,7 @@ public class CarbonEventProcessorService implements EventProcessorService {
         }
 
         if (EventProcessorValueHolder.getPersistenceConfiguration() != null &&
-                managementInfo.getMode() == Mode.HA && managementInfo.getHaConfiguration().isActive()){
+                managementInfo.getMode() == Mode.HA && managementInfo.getHaConfiguration().isActive()) {
             executionPlanRuntime.restoreLastRevision();
         }
 
@@ -737,6 +746,28 @@ public class CarbonEventProcessorService implements EventProcessorService {
             executionPlanConfiguration.setTracingEnabled(isEnabled);
             String executionPlan = executionPlanConfiguration.getExecutionPlan();
             String newExecutionPlan = EventProcessorHelper.setExecutionPlanAnnotationName(executionPlan, EventProcessorConstants.ANNOTATION_NAME_TRACE, isEnabled);
+            executionPlanConfiguration.setExecutionPlan(newExecutionPlan);
+            ExecutionPlanConfigurationFile configFile = getExecutionPlanConfigurationFileByPlanName(executionPlanName);
+            String fileName = configFile.getFileName();
+            EventProcessorConfigurationFilesystemInvoker.delete(fileName);
+            EventProcessorConfigurationFilesystemInvoker.save(newExecutionPlan, executionPlanName, fileName);
+        }
+    }
+
+    public void setProcessingEnabled(String executionPlanName, boolean processEnabled)
+            throws ExecutionPlanConfigurationException {
+        Map<String, ExecutionPlan> executionPlans = tenantSpecificExecutionPlans.get(PrivilegedCarbonContext.getThreadLocalCarbonContext().getTenantId());
+        if (executionPlans != null) {
+            if (processEnabled) {
+                log.info("Execution Plan enabled : " + executionPlanName);
+            } else {
+                log.info("Execution Plan disabled : " + executionPlanName);
+            }
+            ExecutionPlan processorExecutionPlan = executionPlans.get(executionPlanName);
+            ExecutionPlanConfiguration executionPlanConfiguration = processorExecutionPlan.getExecutionPlanConfiguration();
+            executionPlanConfiguration.setProcessingEnabled(processEnabled);
+            String executionPlan = executionPlanConfiguration.getExecutionPlan();
+            String newExecutionPlan = EventProcessorHelper.setExecutionPlanAnnotationName(executionPlan, EventProcessorConstants.ANNOTATION_NAME_PROCESSING, processEnabled);
             executionPlanConfiguration.setExecutionPlan(newExecutionPlan);
             ExecutionPlanConfigurationFile configFile = getExecutionPlanConfigurationFileByPlanName(executionPlanName);
             String fileName = configFile.getFileName();

@@ -24,6 +24,7 @@ public class ExecutionPlanConfigurationDto {
     private String executionPlan;
     private boolean tracingEnabled;
     private boolean statisticsEnabled;
+    private boolean processingEnabled;
     private boolean editable;
     private String deploymentStatus;    //used only in distributed mode.
 
@@ -82,6 +83,14 @@ public class ExecutionPlanConfigurationDto {
 
     public void setStatisticsEnabled(boolean statisticsEnabled) {
         this.statisticsEnabled = statisticsEnabled;
+    }
+
+    public boolean isProcessingEnabled() {
+        return processingEnabled;
+    }
+
+    public void setProcessingEnabled(boolean processingEnabled) {
+        this.processingEnabled = processingEnabled;
     }
 
     public void setEditable(boolean editable) {

@@ -24,6 +24,7 @@ public class ExecutionPlanConfiguration {
     private String description;
     private boolean isTracingEnabled;
     private boolean isStatisticsEnabled;
+    private boolean isProcessingEnabled = true;
     private List<StreamConfiguration> importedStreams;
     private List<StreamConfiguration> exportedStreams;
     private String executionPlan;
@@ -88,6 +89,14 @@ public class ExecutionPlanConfiguration {
 
     public void setStatisticsEnabled(boolean statisticsEnabled) {
         isStatisticsEnabled = statisticsEnabled;
+    }
+
+    public boolean isProcessingEnabled() {
+        return isProcessingEnabled;
+    }
+
+    public void setProcessingEnabled(boolean processingEnabled) {
+        isProcessingEnabled = processingEnabled;
     }
 
     public void setEditable(boolean editable) {

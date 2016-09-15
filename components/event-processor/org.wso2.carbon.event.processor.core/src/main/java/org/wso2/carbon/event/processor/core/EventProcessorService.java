@@ -145,7 +145,16 @@ public interface EventProcessorService {
 
 
     /**
+     * @param executionPlanName the name of the execution plan
+     * @param processingEnabled whether processing is enabled or not
+     * @throws ExecutionPlanConfigurationException
+     */
+    public void setProcessingEnabled(String executionPlanName, boolean processingEnabled)
+            throws ExecutionPlanConfigurationException;
+
+    /**
      * Validates a given execution plan. returns true if valid.
+     *
      * @param executionPlan execution plan.
      */
     public void validateExecutionPlan(String executionPlan)
@@ -170,6 +179,7 @@ public interface EventProcessorService {
     /**
      * The returned status string explains whether the topology is active or not, how many CEP Receivers are connected to a Spout and
      * how many Storm Publishing Bolts are connected to CEP Publishers.
+     *
      * @return a Map which maps the execution plan name to its status. This status is a string, explaining the status of the execution plan in Storm.
      */
     public Map<String, String> getAllExecutionPlanStatusesInStorm();
